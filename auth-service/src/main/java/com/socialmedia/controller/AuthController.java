@@ -1,12 +1,16 @@
 package com.socialmedia.controller;
 
+import com.socialmedia.dto.request.LoginRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
+import com.socialmedia.dto.response.LoginResponseDto;
+import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,8 +19,15 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @GetMapping("/register")
-    public ResponseEntity<String> register(RegisterRequestDto dto){
-        return ResponseEntity.ok("Deneme");
+    @PostMapping("/register")
+    @Operation(summary="Register Method")
+    public ResponseEntity<Auth> register(@RequestBody @Valid RegisterRequestDto dto) {
+
+        return ResponseEntity.ok(authService.register(dto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
+        return ResponseEntity.ok(authService.login(dto).get());
     }
 }

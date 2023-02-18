@@ -1,6 +1,7 @@
 package com.socialmedia.repository.entity;
 
 import com.socialmedia.repository.enums.Roles;
+import com.socialmedia.repository.enums.Status;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,10 @@ public class Auth {
     @Builder.Default
     private Roles role=Roles.USER;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Status status = Status.PENDING;
+
+    private String activatedCode;
 
 }
