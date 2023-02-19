@@ -3,6 +3,7 @@ package com.socialmedia.mapper;
 import com.socialmedia.dto.request.LoginRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
+import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.repository.entity.Auth;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -20,5 +21,7 @@ public interface IAuthMapper {
     Auth toAuth(final LoginRequestDto dto);
 
     LoginResponseDto toLoginResponseDto(final Auth auth);
+
+    RegisterResponseDto toRegisterResponseDto(final Auth auth);
 
 }
