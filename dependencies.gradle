@@ -1,11 +1,12 @@
 ext {
 
     versions = [
-            springBoot: "2.7.4",
-            lombok    : "1.18.24",
-            postgresql: "42.5.0",
-            mapstruct : "1.5.2.Final",
-            openApi   : "1.6.11",
+            springBoot : "2.7.4",
+            lombok     : "1.18.24",
+            postgresql : "42.5.0",
+            mapstruct  : "1.5.2.Final",
+            openApi    : "1.6.11",
+            springCloud: "3.1.4",
     ]
 
     libs = [
@@ -18,6 +19,7 @@ ext {
             lombokMapstructBinding: "org.projectlombok:lombok-mapstruct-binding:0.2.0",
             springValidation      : "org.springframework.boot:spring-boot-starter-validation:$versions.springBoot",
             openApi               : "org.springdoc:springdoc-openapi-ui:$versions.openApi",
+            springOpenFeign       : "org.springframework.cloud:spring-cloud-starter-openfeign:$versions.springCloud",
     ]
 }
 

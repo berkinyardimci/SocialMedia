@@ -50,6 +50,7 @@ allprojects {
 		annotationProcessor libs.lombokMapstructBinding
 		implementation libs.openApi
 		implementation libs.springValidation
+		implementation libs.springOpenFeign
 	}
 
 }
