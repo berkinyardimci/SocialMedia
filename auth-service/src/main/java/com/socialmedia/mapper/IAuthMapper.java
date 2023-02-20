@@ -1,6 +1,7 @@
 package com.socialmedia.mapper;
 
 import com.socialmedia.dto.request.LoginRequestDto;
+import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
@@ -23,5 +24,7 @@ public interface IAuthMapper {
     LoginResponseDto toLoginResponseDto(final Auth auth);
 
     RegisterResponseDto toRegisterResponseDto(final Auth auth);
+
+    NewCreateUserDto toNewCreateUserDto(final Auth auth);
 
 }

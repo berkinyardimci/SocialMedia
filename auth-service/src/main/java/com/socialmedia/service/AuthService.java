@@ -2,11 +2,13 @@ package com.socialmedia.service;
 
 import com.socialmedia.dto.request.ActivateCodeRequest;
 import com.socialmedia.dto.request.LoginRequestDto;
+import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
+import com.socialmedia.manager.IUserManager;
 import com.socialmedia.mapper.IAuthMapper;
 import com.socialmedia.repository.IAuthRepository;
 import com.socialmedia.repository.entity.Auth;
@@ -23,10 +25,12 @@ import java.util.UUID;
 public class AuthService extends ServiceManager {
 
     private final IAuthRepository authRepository;
+    private final IUserManager userManager;
 
-    public AuthService(IAuthRepository authRepository) {
+    public AuthService(IAuthRepository authRepository, IUserManager userManager) {
         super(authRepository);
         this.authRepository = authRepository;
+        this.userManager = userManager;
     }
 
     public RegisterResponseDto register(RegisterRequestDto dto) {
@@ -42,6 +46,11 @@ public class AuthService extends ServiceManager {
             try {
                 auth.setActivatedCode(CodeGenerator.generateCode(UUID.randomUUID().toString()));
                 save(auth);
+                userManager.createUser(NewCreateUserDto.builder()
+                        .authid(auth.getId())
+                        .email(auth.getEmail())
+                        .username(auth.getUsername())
+                        .build());
                 return IAuthMapper.INSTANCE.toRegisterResponseDto(auth);
             } catch (Exception ex) {
                 throw new AuthManagerException(ErrorType.USER_NOT_CREATED);
@@ -68,13 +77,13 @@ public class AuthService extends ServiceManager {
 
     public boolean activateStatus(ActivateCodeRequest dto) {
         Optional<Auth> auth = authRepository.findById(dto.getId());
-        if (auth.isEmpty()){
+        if (auth.isEmpty()) {
             throw new AuthManagerException(ErrorType.USER_NOT_FOUND);
         }
-        if(auth.get().getActivatedCode().equals(dto.getActivatedCode())){
+        if (auth.get().getActivatedCode().equals(dto.getActivatedCode())) {
             auth.get().setStatus(Status.ACTIVE);
             save(auth.get());
-            return  true;
+            return true;
         }
         throw new AuthManagerException(ErrorType.INVALID_ACTİVATE_CODE);
     }
