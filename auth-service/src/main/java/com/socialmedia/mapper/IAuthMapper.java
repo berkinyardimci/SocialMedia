@@ -27,4 +27,5 @@ public interface IAuthMapper {
 
     NewCreateUserDto toNewCreateUserDto(final Auth auth);
 
+
 }

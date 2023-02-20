@@ -1,5 +1,6 @@
 package com.socialmedia.manager;
 
+import com.socialmedia.dto.request.ActivateCodeRequest;
 import com.socialmedia.dto.request.NewCreateUserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -11,4 +12,7 @@ public interface IUserManager {
 
     @PostMapping("/create")
     public ResponseEntity<Boolean> createUser(@RequestBody NewCreateUserDto dto);
+    @PostMapping("/activate")
+    public ResponseEntity<Boolean> activateStatus(@RequestBody ActivateCodeRequest dto);
+
 }

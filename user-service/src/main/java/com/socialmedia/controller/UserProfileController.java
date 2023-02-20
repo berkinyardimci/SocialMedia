@@ -1,5 +1,6 @@
 package com.socialmedia.controller;
 
+import com.socialmedia.dto.request.ActivateCodeRequest;
 import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.exception.UserManagerException;
@@ -31,5 +32,10 @@ public class UserProfileController {
         } catch (Exception exception) {
             throw new UserManagerException(ErrorType.USER_NOT_CREATED);
         }
+    }
+
+    @PostMapping("/activate")
+    public ResponseEntity<Boolean> activateStatus(@RequestBody ActivateCodeRequest dto){
+        return ResponseEntity.ok(userProfileService.activateStatus(dto));
     }
 }
