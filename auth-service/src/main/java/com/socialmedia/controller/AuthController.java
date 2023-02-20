@@ -7,6 +7,7 @@ import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
 import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.service.AuthService;
+import com.socialmedia.utility.JwtTokenManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtTokenManager jwtTokenManager;
 
     @PostMapping("/register")
     @Operation(summary="Register Method")
@@ -36,5 +38,15 @@ public class AuthController {
     @PostMapping("/activate")
     public ResponseEntity<Boolean> activateStatus(@RequestBody ActivateCodeRequest dto) {
         return ResponseEntity.ok(authService.activateStatus(dto));
+    }
+
+    @GetMapping("/token")
+    public String getToken(Long id){
+        return jwtTokenManager.createToken(id);
+    }
+
+    @GetMapping("/getId")
+    public Long getId(String token){
+        return jwtTokenManager.getUserId(token).get();
     }
 }

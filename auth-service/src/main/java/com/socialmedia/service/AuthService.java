@@ -15,6 +15,7 @@ import com.socialmedia.repository.entity.Auth;
 import com.socialmedia.repository.enums.Roles;
 import com.socialmedia.repository.enums.Status;
 import com.socialmedia.utility.CodeGenerator;
+import com.socialmedia.utility.JwtTokenManager;
 import com.socialmedia.utility.ServiceManager;
 import org.springframework.stereotype.Service;
 
@@ -26,11 +27,13 @@ public class AuthService extends ServiceManager {
 
     private final IAuthRepository authRepository;
     private final IUserManager userManager;
+    private JwtTokenManager jwtTokenManager;
 
-    public AuthService(IAuthRepository authRepository, IUserManager userManager) {
+    public AuthService(IAuthRepository authRepository, IUserManager userManager,JwtTokenManager jwtTokenManager) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userManager = userManager;
+        this.jwtTokenManager = jwtTokenManager;
     }
 
     public RegisterResponseDto register(RegisterRequestDto dto) {
@@ -67,8 +70,11 @@ public class AuthService extends ServiceManager {
     public Optional<LoginResponseDto> login(LoginRequestDto dto) {
         Optional<Auth> auth = authRepository.findOptionalByUsernameAndPassword(dto.getUsername(), dto.getPassword());
         if (auth.isPresent()) {
+            LoginResponseDto loginResponseDto = IAuthMapper.INSTANCE.toLoginResponseDto(auth.get());
+            String token = jwtTokenManager.createToken(loginResponseDto.getId());
+            loginResponseDto.setToken(token);
 
-            return Optional.of(IAuthMapper.INSTANCE.toLoginResponseDto(auth.get()));
+            return Optional.of(loginResponseDto);
         } else {
             throw new AuthManagerException(ErrorType.LOGIN_ERROR_WRONG);
         }

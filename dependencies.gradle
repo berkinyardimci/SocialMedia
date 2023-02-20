@@ -7,6 +7,7 @@ ext {
             mapstruct  : "1.5.2.Final",
             openApi    : "1.6.11",
             springCloud: "3.1.4",
+            auth0      : "4.0.0",
     ]
 
     libs = [
@@ -20,6 +21,7 @@ ext {
             springValidation      : "org.springframework.boot:spring-boot-starter-validation:$versions.springBoot",
             openApi               : "org.springdoc:springdoc-openapi-ui:$versions.openApi",
             springOpenFeign       : "org.springframework.cloud:spring-cloud-starter-openfeign:$versions.springCloud",
+            javaJWT               : "com.auth0:java-jwt:$versions.auth0",
     ]
 }
 
