@@ -1,5 +1,6 @@
 package com.socialmedia.controller;
 
+import static com.socialmedia.constant.ApiUrls .*;
 import com.socialmedia.dto.request.ActivateCodeRequest;
 import com.socialmedia.dto.request.LoginRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
@@ -14,39 +15,45 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping(AUTH)
 public class AuthController {
 
     private final AuthService authService;
     private final JwtTokenManager jwtTokenManager;
 
-    @PostMapping("/register")
+    @PostMapping(REGISTER)
     @Operation(summary="Register Method")
     public ResponseEntity<RegisterResponseDto> register(@RequestBody @Valid RegisterRequestDto dto) {
 
         return ResponseEntity.ok(authService.register(dto));
     }
 
-    @PostMapping("/login")
+    @PostMapping(LOGIN)
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto dto) {
         return ResponseEntity.ok(authService.login(dto).get());
     }
 
-    @PostMapping("/activate")
+    @PostMapping(ACTIVATESTATUS)
     public ResponseEntity<Boolean> activateStatus(@RequestBody ActivateCodeRequest dto) {
         return ResponseEntity.ok(authService.activateStatus(dto));
     }
 
-    @GetMapping("/token")
+    @GetMapping(GETTOKEN)
     public String getToken(Long id){
         return jwtTokenManager.createToken(id);
     }
 
-    @GetMapping("/getId")
+    @GetMapping(GETIDBYTOKEN)
     public Long getId(String token){
         return jwtTokenManager.getUserId(token).get();
+    }
+
+    @GetMapping(GETALLAUTH)
+    public ResponseEntity<List<Auth>> findAll(String token){
+        return ResponseEntity.ok(authService.findAll());
     }
 }

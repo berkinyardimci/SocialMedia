@@ -52,6 +52,8 @@ allprojects {
 		implementation libs.springValidation
 		implementation libs.springOpenFeign
 		implementation libs.javaJWT
+		implementation libs.springCloudStaterSleuth
+		implementation libs.springCloudSleuthZipkin
 	}
 
 }

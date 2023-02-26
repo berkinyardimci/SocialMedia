@@ -1,25 +1,28 @@
 package com.socialmedia.controller;
 
+import static com.socialmedia.constant.ApiUrls .*;
+
 import com.socialmedia.dto.request.ActivateCodeRequest;
 import com.socialmedia.dto.request.NewCreateUserDto;
+import com.socialmedia.dto.request.UpdateRequestDto;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.exception.UserManagerException;
+import com.socialmedia.repository.entity.UserProfile;
 import com.socialmedia.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping(USER)
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @PostMapping("/create")
+    @PostMapping(CREATE)
     public ResponseEntity<Boolean> createUser(@RequestBody NewCreateUserDto dto) {
         try {
             if(dto.getEmail() ==null){
@@ -34,8 +37,23 @@ public class UserProfileController {
         }
     }
 
-    @PostMapping("/activate")
+    @PostMapping(ACTIVATESTATUS)
     public ResponseEntity<Boolean> activateStatus(@RequestBody ActivateCodeRequest dto){
         return ResponseEntity.ok(userProfileService.activateStatus(dto));
     }
+    @PostMapping(ACTIVATESTATUSBYID)
+    public ResponseEntity<Boolean> activateStatus(@PathVariable Long authid){
+        return ResponseEntity.ok(userProfileService.activateStatus(authid));
+    }
+
+    @PostMapping(UPDATE)
+    public ResponseEntity<Boolean> updateProfile(@RequestBody UpdateRequestDto dto){
+        return ResponseEntity.ok(userProfileService.updateUser(dto));
+    }
+
+    @GetMapping(GETALL)
+    public ResponseEntity<List<UserProfile>> findAll(){
+        return ResponseEntity.ok(userProfileService.findAll());
+    }
+
 }
