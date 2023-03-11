@@ -11,6 +11,7 @@ import com.socialmedia.service.AuthService;
 import com.socialmedia.utility.JwtTokenManager;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,5 +56,16 @@ public class AuthController {
     @GetMapping(GETALLAUTH)
     public ResponseEntity<List<Auth>> findAll(String token){
         return ResponseEntity.ok(authService.findAll());
+    }
+
+    @GetMapping("/redis")
+    @Cacheable(value = "redis_example")
+    public String redisExample(String string){
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return string;
     }
 }
