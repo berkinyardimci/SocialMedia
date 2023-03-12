@@ -2,6 +2,7 @@ package com.socialmedia.mapper;
 
 import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.dto.request.UpdateRequestDto;
+import com.socialmedia.dto.response.UserProfileRedisResponseDto;
 import com.socialmedia.repository.entity.UserProfile;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -16,4 +17,6 @@ public interface IUserMapper {
     UserProfile toUserProfile(final NewCreateUserDto dto);
 
     UserProfile toUserProfile(final UpdateRequestDto dto);
+
+    UserProfileRedisResponseDto toUserProfileRedisResponseDto(final UserProfile userProfile);
 }

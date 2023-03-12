@@ -6,6 +6,7 @@ import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
+import com.socialmedia.dto.response.RoleResponseDto;
 import com.socialmedia.exception.AuthManagerException;
 import com.socialmedia.exception.ErrorType;
 import com.socialmedia.manager.IUserManager;
@@ -17,10 +18,13 @@ import com.socialmedia.repository.enums.Status;
 import com.socialmedia.utility.CodeGenerator;
 import com.socialmedia.utility.JwtTokenManager;
 import com.socialmedia.utility.ServiceManager;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthService extends ServiceManager {
@@ -29,11 +33,14 @@ public class AuthService extends ServiceManager {
     private final IUserManager userManager;
     private JwtTokenManager jwtTokenManager;
 
-    public AuthService(IAuthRepository authRepository, IUserManager userManager,JwtTokenManager jwtTokenManager) {
+    private final  CacheManager cacheManager;
+
+    public AuthService(IAuthRepository authRepository, IUserManager userManager, JwtTokenManager jwtTokenManager, CacheManager cacheManager) {
         super(authRepository);
         this.authRepository = authRepository;
         this.userManager = userManager;
         this.jwtTokenManager = jwtTokenManager;
+        this.cacheManager = cacheManager;
     }
 
     public RegisterResponseDto register(RegisterRequestDto dto) {
@@ -49,6 +56,7 @@ public class AuthService extends ServiceManager {
             try {
                 auth.setActivatedCode(CodeGenerator.generateCode(UUID.randomUUID().toString()));
                 save(auth);
+                cacheManager.getCache("findbyrole").evict(auth.getRole());
                 userManager.createUser(NewCreateUserDto.builder()
                         .authid(auth.getId())
                         .email(auth.getEmail())
@@ -90,8 +98,21 @@ public class AuthService extends ServiceManager {
             auth.get().setStatus(Status.ACTIVE);
             userManager.activateStatus(dto.getId());
             save(auth.get());
+            cacheManager.getCache("findactiveprofile").clear();
             return true;
+
         }
         throw new AuthManagerException(ErrorType.INVALID_ACTİVATE_CODE);
+    }
+
+    public List<RoleResponseDto> findAllByRole(String role){
+        Roles roles=null;
+        try {
+            roles = Roles.valueOf(role.toUpperCase());
+        }catch (Exception ex){
+        throw new AuthManagerException(ErrorType.ROLE_NOT_FOUND);
+        }
+        return authRepository.findAllByRole(roles).stream()
+                .map(x-> IAuthMapper.INSTANCE.toRoleResponseDto(x)).collect(Collectors.toList());
     }
 }

@@ -16,3 +16,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+redis:
+  host: localhost
+  port: 6379
+
+myapplication:
+  auth:
+    feign-auth: http://localhost:8090/api/v1

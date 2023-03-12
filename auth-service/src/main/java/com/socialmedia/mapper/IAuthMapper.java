@@ -5,6 +5,7 @@ import com.socialmedia.dto.request.NewCreateUserDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
+import com.socialmedia.dto.response.RoleResponseDto;
 import com.socialmedia.repository.entity.Auth;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -26,6 +27,8 @@ public interface IAuthMapper {
     RegisterResponseDto toRegisterResponseDto(final Auth auth);
 
     NewCreateUserDto toNewCreateUserDto(final Auth auth);
+
+    RoleResponseDto toRoleResponseDto(final Auth auth);
 
 
 }

@@ -6,7 +6,9 @@ import com.socialmedia.dto.request.LoginRequestDto;
 import com.socialmedia.dto.request.RegisterRequestDto;
 import com.socialmedia.dto.response.LoginResponseDto;
 import com.socialmedia.dto.response.RegisterResponseDto;
+import com.socialmedia.dto.response.RoleResponseDto;
 import com.socialmedia.repository.entity.Auth;
+import com.socialmedia.repository.enums.Roles;
 import com.socialmedia.service.AuthService;
 import com.socialmedia.utility.JwtTokenManager;
 import io.swagger.v3.oas.annotations.Operation;
@@ -68,4 +70,13 @@ public class AuthController {
         }
         return string;
     }
+
+    @GetMapping("/findbyrole{role}")
+    public ResponseEntity<List<RoleResponseDto>> findAllByRoles(@PathVariable String role){
+
+        return  ResponseEntity.ok(authService.findAllByRole(role));
+    }
+
+
+
 }
