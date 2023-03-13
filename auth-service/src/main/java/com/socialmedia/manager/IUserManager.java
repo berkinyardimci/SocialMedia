@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(url = "http://localhost:8091/api/v1/user", name = "user-service-userprofile", decode404 = true )
+@FeignClient(url = "${myapplication.feign.user}/user", name = "user-service-userprofile", decode404 = true )
 public interface IUserManager {
 
     @PostMapping(CREATE)
